@@ -77,12 +77,6 @@ signal-hook-mio = { version = "0.2.3", features = [
     "support-v0_8",
 ], optional = true }
 
-# #
-# # non WASM dependencies
-# #
-# [target.'cfg(not(target_family = "wasm"))'.dependencies]
-# parking_lot = "0.12"
-
 #
 # WASM dependencies
 #

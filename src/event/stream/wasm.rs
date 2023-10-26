@@ -1,3 +1,6 @@
+/// Port of work of [rrbutani](https://github.com/rrbutani)
+/// See original branch: https://github.com/rrbutani/crossterm/tree/xtermjs
+
 use std::{
     collections::VecDeque,
     pin::Pin,
