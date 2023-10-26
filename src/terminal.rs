@@ -118,20 +118,24 @@ pub fn is_raw_mode_enabled() -> io::Result<bool> {
     }
 }
 
-#[cfg(not(target_arch = "wasm32"))]
 /// Enables raw mode.
 ///
 /// Please have a look at the [raw mode](./index.html#raw-mode) section.
 pub fn enable_raw_mode() -> io::Result<()> {
-    sys::enable_raw_mode()
+    #[cfg(not(target_arch = "wasm32"))]
+    return sys::enable_raw_mode();
+    #[cfg(target_arch = "wasm32")]
+    return Ok(());
 }
 
-#[cfg(not(target_arch = "wasm32"))]
 /// Disables raw mode.
 ///
 /// Please have a look at the [raw mode](./index.html#raw-mode) section.
 pub fn disable_raw_mode() -> io::Result<()> {
-    sys::disable_raw_mode()
+    #[cfg(not(target_arch = "wasm32"))]
+    return sys::disable_raw_mode();
+    #[cfg(target_arch = "wasm32")]
+    return Ok(());
 }
 
 #[cfg(not(target_arch = "wasm32"))]

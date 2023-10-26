@@ -19,7 +19,6 @@ use super::super::{
 
 type RwLock<T> = StdRwLock<T>;
 
-#[derive(Debug)]
 pub struct EventStream<'t> {
     // On `Drop` this will automatically get unregistered.
     data_event_listener_handle: DisposableWrapper<Disposable>,
