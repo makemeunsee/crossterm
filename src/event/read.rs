@@ -4,6 +4,7 @@ use std::{collections::vec_deque::VecDeque, io, time::Duration};
 use crate::event::source::unix::UnixInternalEventSource;
 #[cfg(windows)]
 use crate::event::source::windows::WindowsEventSource;
+#[cfg(not(target_arch = "wasm32"))]
 #[cfg(feature = "event-stream")]
 use crate::event::sys::Waker;
 use crate::event::{filter::Filter, source::EventSource, timeout::PollTimeout, InternalEvent};
@@ -15,6 +16,7 @@ pub(crate) struct InternalEventReader {
     skipped_events: Vec<InternalEvent>,
 }
 
+#[cfg(not(target_arch = "wasm32"))]
 impl Default for InternalEventReader {
     fn default() -> Self {
         #[cfg(windows)]
@@ -34,6 +36,7 @@ impl Default for InternalEventReader {
 
 impl InternalEventReader {
     /// Returns a `Waker` allowing to wake/force the `poll` method to return `Ok(false)`.
+    #[cfg(not(target_arch = "wasm32"))]
     #[cfg(feature = "event-stream")]
     pub(crate) fn waker(&self) -> Waker {
         self.source.as_ref().expect("reader source not set").waker()
@@ -422,6 +425,7 @@ mod tests {
             Ok(None)
         }
 
+        #[cfg(not(target_arch = "wasm32"))]
         #[cfg(feature = "event-stream")]
         fn waker(&self) -> super::super::sys::Waker {
             unimplemented!();

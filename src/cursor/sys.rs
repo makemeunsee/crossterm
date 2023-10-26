@@ -3,6 +3,12 @@
 #[cfg(unix)]
 #[cfg(feature = "events")]
 pub use self::unix::position;
+
+// TODO(wasm32) restore if actually required
+// #[cfg(target_arch = "wasm32")]
+// #[cfg(feature = "events")]
+// pub use self::wasm::position;
+
 #[cfg(windows)]
 pub use self::windows::position;
 #[cfg(windows)]
@@ -17,3 +23,7 @@ pub(crate) mod windows;
 #[cfg(unix)]
 #[cfg(feature = "events")]
 pub(crate) mod unix;
+
+#[cfg(target_arch = "wasm32")]
+#[cfg(feature = "events")]
+pub(crate) mod wasm;

@@ -1,4 +1,4 @@
-#![deny(unused_imports, unused_must_use)]
+#![deny(unused_must_use)]
 
 //! # Cross-platform Terminal Manipulation Library
 //!

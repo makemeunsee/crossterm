@@ -18,6 +18,15 @@ pub(crate) use self::windows::{
     set_size, set_window_title, size, window_size,
 };
 
+#[cfg(target_arch = "wasm32")]
+mod wasm;
+
+#[cfg(all(target_arch = "wasm32", feature = "event-stream"))]
+#[allow(unused)]
+pub(crate) use self::wasm::is_raw_mode_enabled;
+#[cfg(target_arch = "wasm32")]
+pub use self::wasm::size;
+
 #[cfg(windows)]
 mod windows;
 

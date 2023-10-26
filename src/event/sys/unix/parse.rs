@@ -178,7 +178,9 @@ pub(crate) fn parse_csi(buffer: &[u8]) -> io::Result<Option<InternalEvent>> {
         b'Q' => Some(Event::Key(KeyCode::F(2).into())),
         b'S' => Some(Event::Key(KeyCode::F(4).into())),
         b'?' => match buffer[buffer.len() - 1] {
+            #[cfg(not(target_arch = "wasm32"))]
             b'u' => return parse_csi_keyboard_enhancement_flags(buffer),
+            #[cfg(not(target_arch = "wasm32"))]
             b'c' => return parse_csi_primary_device_attributes(buffer),
             _ => None,
         },
@@ -256,6 +258,7 @@ pub(crate) fn parse_csi_cursor_position(buffer: &[u8]) -> io::Result<Option<Inte
     Ok(Some(InternalEvent::CursorPosition(x, y)))
 }
 
+#[cfg(not(target_arch = "wasm32"))]
 fn parse_csi_keyboard_enhancement_flags(buffer: &[u8]) -> io::Result<Option<InternalEvent>> {
     // ESC [ ? flags u
     assert!(buffer.starts_with(&[b'\x1B', b'[', b'?'])); // ESC [ ?
@@ -288,6 +291,7 @@ fn parse_csi_keyboard_enhancement_flags(buffer: &[u8]) -> io::Result<Option<Inte
     Ok(Some(InternalEvent::KeyboardEnhancementFlags(flags)))
 }
 
+#[cfg(not(target_arch = "wasm32"))]
 fn parse_csi_primary_device_attributes(buffer: &[u8]) -> io::Result<Option<InternalEvent>> {
     // ESC [ 64 ; attr1 ; attr2 ; ... ; attrn ; c
     assert!(buffer.starts_with(&[b'\x1B', b'[', b'?']));

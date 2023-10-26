@@ -104,15 +104,19 @@ use std::time::Duration;
 use bitflags::bitflags;
 use std::hash::{Hash, Hasher};
 
+#[cfg(not(target_arch = "wasm32"))]
 /// Static instance of `InternalEventReader`.
 /// This needs to be static because there can be one event reader.
 static INTERNAL_EVENT_READER: Mutex<Option<InternalEventReader>> = parking_lot::const_mutex(None);
 
+#[cfg(not(target_arch = "wasm32"))]
 pub(crate) fn lock_internal_event_reader() -> MappedMutexGuard<'static, InternalEventReader> {
     MutexGuard::map(INTERNAL_EVENT_READER.lock(), |reader| {
         reader.get_or_insert_with(InternalEventReader::default)
     })
 }
+
+#[cfg(not(target_arch = "wasm32"))]
 fn try_lock_internal_event_reader_for(
     duration: Duration,
 ) -> Option<MappedMutexGuard<'static, InternalEventReader>> {
@@ -122,6 +126,7 @@ fn try_lock_internal_event_reader_for(
     ))
 }
 
+#[cfg(not(target_arch = "wasm32"))]
 /// Checks if there is an [`Event`](enum.Event.html) available.
 ///
 /// Returns `Ok(true)` if an [`Event`](enum.Event.html) is available otherwise it returns `Ok(false)`.
@@ -165,6 +170,7 @@ pub fn poll(timeout: Duration) -> std::io::Result<bool> {
     poll_internal(Some(timeout), &EventFilter)
 }
 
+#[cfg(not(target_arch = "wasm32"))]
 /// Reads a single [`Event`](enum.Event.html).
 ///
 /// This function blocks until an [`Event`](enum.Event.html) is available. Combine it with the
@@ -214,6 +220,7 @@ pub fn read() -> std::io::Result<Event> {
     }
 }
 
+#[cfg(not(target_arch = "wasm32"))]
 /// Polls to check if there are any `InternalEvent`s that can be read within the given duration.
 pub(crate) fn poll_internal<F>(timeout: Option<Duration>, filter: &F) -> std::io::Result<bool>
 where
@@ -232,6 +239,7 @@ where
     reader.poll(timeout, filter)
 }
 
+#[cfg(not(target_arch = "wasm32"))]
 /// Reads a single `InternalEvent`.
 pub(crate) fn read_internal<F>(filter: &F) -> std::io::Result<InternalEvent>
 where
@@ -945,7 +953,7 @@ pub(crate) enum InternalEvent {
     /// An event.
     Event(Event),
     /// A cursor position (`col`, `row`).
-    #[cfg(unix)]
+    #[cfg(any(unix, target_arch = "wasm32"))]
     CursorPosition(u16, u16),
     /// The progressive keyboard enhancement flags enabled by the terminal.
     #[cfg(unix)]

@@ -98,9 +98,11 @@ use crate::{csi, impl_display};
 
 pub(crate) mod sys;
 
+#[cfg(not(target_arch = "wasm32"))]
 #[cfg(feature = "events")]
 pub use sys::supports_keyboard_enhancement;
 
+#[cfg(not(target_arch = "wasm32"))]
 /// Tells whether the raw mode is enabled.
 ///
 /// Please have a look at the [raw mode](./index.html#raw-mode) section.
@@ -116,6 +118,7 @@ pub fn is_raw_mode_enabled() -> io::Result<bool> {
     }
 }
 
+#[cfg(not(target_arch = "wasm32"))]
 /// Enables raw mode.
 ///
 /// Please have a look at the [raw mode](./index.html#raw-mode) section.
@@ -123,6 +126,7 @@ pub fn enable_raw_mode() -> io::Result<()> {
     sys::enable_raw_mode()
 }
 
+#[cfg(not(target_arch = "wasm32"))]
 /// Disables raw mode.
 ///
 /// Please have a look at the [raw mode](./index.html#raw-mode) section.
@@ -130,6 +134,7 @@ pub fn disable_raw_mode() -> io::Result<()> {
     sys::disable_raw_mode()
 }
 
+#[cfg(not(target_arch = "wasm32"))]
 /// Returns the terminal size `(columns, rows)`.
 ///
 /// The top left cell is represented `(1, 1)`.
@@ -145,6 +150,7 @@ pub struct WindowSize {
     pub height: u16,
 }
 
+#[cfg(not(target_arch = "wasm32"))]
 /// Returns the terminal size `[WindowSize]`.
 ///
 /// The width and height in pixels may not be reliably implemented or default to 0.
